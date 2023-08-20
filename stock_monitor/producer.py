@@ -1,60 +1,33 @@
 import json
-import traceback
-from datetime import datetime
-
 import websocket
 from kafka import KafkaProducer
-from kafka.errors import KafkaError
 
-producer = KafkaProducer(
-    bootstrap_servers="localhost:19092",
-    value_serializer=lambda m: json.dumps(m).encode("ascii"),
-)
+# Configura las direcciones de Kafka obtenidas de la configuración de Redpanda
+bootstrap_servers = ['localhost:9092']
 
-topic = "stock-updates"
-
-
-# Redpanda handlers
-def on_success(metadata):
-    print(f"Message produced to topic '{metadata.topic}' at offset {metadata.offset}")
+# Crea un productor de Kafka
+producer = KafkaProducer(bootstrap_servers=bootstrap_servers,
+                         value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 
-def on_error(e):
-    print(f"Error sending message: {e}")
+def on_message(ws, message):
+    print(message)
+    data = json.loads(message)
+    if data['type'] == 'trade':
+        # Filtra los datos para los símbolos específicos
+        if data['data'][0]['s'] in ['AAPL', 'AMZN', 'BINANCE:BTCUSDT']:
+            producer.send('trades-orders', value=data['data'][0])
 
 
-# WS handlers
-def on_ws_message(ws, message):
-    data = json.loads(message)["data"]
-    records = [
-        {
-            "symbol": d["s"],
-            "price": d["p"],
-            "volume": d["v"],
-            "timestamp": datetime.utcfromtimestamp(d["t"] / 1000).strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
-        }
-        for d in data
-    ]
-
-    for record in records:
-        future = producer.send(topic, value=record)
-        future.add_callback(on_success)
-        future.add_errback(on_error)
-        producer.flush()
-
-
-def on_ws_error(ws, error):
+def on_error(ws, error):
     print(error)
 
 
-def on_ws_close(ws, close_status_code, close_msg):
-    producer.close()
+def on_close(ws):
     print("### closed ###")
 
 
-def on_ws_open(ws):
+def on_open(ws):
     ws.send('{"type":"subscribe","symbol":"AAPL"}')
     ws.send('{"type":"subscribe","symbol":"AMZN"}')
     ws.send('{"type":"subscribe","symbol":"BINANCE:BTCUSDT"}')
@@ -62,11 +35,9 @@ def on_ws_open(ws):
 
 if __name__ == "__main__":
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp(
-        "wss://ws.finnhub.io?token=<api-key>",
-        on_message=on_ws_message,
-        on_error=on_ws_error,
-        on_close=on_ws_close,
-    )
-    ws.on_open = on_ws_open
+    ws = websocket.WebSocketApp("wss://ws.finnhub.io?token=cjegoihr01qgod9an6l0cjegoihr01qgod9an6lg",
+                              on_message = on_message,
+                              on_error = on_error,
+                              on_close = on_close)
+    ws.on_open = on_open
     ws.run_forever()
