@@ -1,42 +1,25 @@
-crear stream 
-CREATE STREAM trades_stream (p DOUBLE, s STRING, t STRING, v DOUBLE) WITH (KAFKA_TOPIC='trades-orders', VALUE_FORMAT='JSON');
+//crear stream 
+CREATE STREAM trades_stream (p DOUBLE, s STRING, t STRING, v DOUBLE) WITH (KAFKA_TOPIC='trades-orders', KEY_FORMAT= 'KAFKA', PARTITIONS=2, VALUE_FORMAT='JSON');
 
-crear tabla
- CREATE TABLE contar_symbolos AS SELECT s, COUNT(s) FROM trades_stream GROUP BY s EMIT CHANGES;
+//consultar los datos
 
-crear tabla
- CREATE TABLE promedio AS SELECT *, AVG(p) FROM trades_stream GROUP BY s EMIT CHANGES;
-
-
-consultar los datos
+CREATE TABLE contar_symbolos AS SELECT s, COUNT(s) FROM trades_stream GROUP BY s EMIT CHANGES;
+SELECT * FROM contar_symbolos;
 
 
-select * from contar_symbolos;
-
-select s,avg(p) from trades_stream group by s EMIT CHANGES;
+¿Cuál fue el promedio ponderado de precio de una unidad por cada uno de los símbolos procesados? (e.j. AAPL)
 
 CREATE TABLE promedio_symbolos AS SELECT s,avg(p) FROM trades_stream GROUP BY s EMIT CHANGES;
-
-
-select * from promedio_symbolos;
+SELECT * FROM promedio_symbolos;
 
 
 CREATE TABLE pro_max AS SELECT s,max(p) FROM trades_stream GROUP BY s EMIT CHANGES;
-
-
-select * from pro_max;
-
+SELECT * FROM pro_max;
 
 
 CREATE TABLE pro_min AS SELECT s,min(p) FROM trades_stream GROUP BY s EMIT CHANGES;
-
-
-select * from pro_min;
-
-
+SELECT * FROM pro_min;
 
 
 CREATE TABLE pro_count AS SELECT s,count(p) FROM trades_stream GROUP BY s EMIT CHANGES;
-
-
-select * from pro_count;
+SELECT * FROM pro_count;
