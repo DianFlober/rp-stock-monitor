@@ -13,13 +13,15 @@ CREATE TABLE promedio_symbolos AS SELECT s,avg(p) FROM trades_stream GROUP BY s 
 SELECT * FROM promedio_symbolos;
 
 
+¿Cuál fue el máximo precio registrado por símbolo?
 CREATE TABLE pro_max AS SELECT s,max(p) FROM trades_stream GROUP BY s EMIT CHANGES;
 SELECT * FROM pro_max;
 
-
+¿Cuál fue el precio mínimo registrado por símbolo?
 CREATE TABLE pro_min AS SELECT s,min(p) FROM trades_stream GROUP BY s EMIT CHANGES;
 SELECT * FROM pro_min;
 
 
+¿cuántas transacciones se procesaron por símbolo?
 CREATE TABLE pro_count AS SELECT s,count(p) FROM trades_stream GROUP BY s EMIT CHANGES;
 SELECT * FROM pro_count;
