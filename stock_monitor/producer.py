@@ -3,7 +3,7 @@ import websocket
 from kafka import KafkaProducer
 
 # Configura las direcciones de Kafka obtenidas de la configuración de Redpanda
-bootstrap_servers = ['localhost:9092']
+bootstrap_servers = ['localhost:29092']
 
 # Crea un productor de Kafka
 producer = KafkaProducer(bootstrap_servers=bootstrap_servers,
