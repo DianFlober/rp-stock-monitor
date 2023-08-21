@@ -1,0 +1,21 @@
+time="2023-08-21T02:30:16Z" level=info msg="create process:rpk_status"
+time="2023-08-21T02:30:16Z" level=info msg="create process:wasm_engine"
+time="2023-08-21T02:30:16Z" level=info msg="stop listening"
+time="2023-08-21T02:30:16Z" level=info msg="try to start program" program=rpk_status
+time="2023-08-21T02:30:16Z" level=info msg="try to start program" program=wasm_engine
+time="2023-08-21T02:30:17Z" level=info msg="success to start program" program=rpk_status
+time="2023-08-21T02:30:17Z" level=info msg="success to start program" program=wasm_engine
+time="2023-08-21T02:33:52Z" level=info msg="create process:rpk_status"
+time="2023-08-21T02:33:52Z" level=info msg="create process:wasm_engine"
+time="2023-08-21T02:33:52Z" level=info msg="stop listening"
+time="2023-08-21T02:33:52Z" level=info msg="try to start program" program=rpk_status
+time="2023-08-21T02:33:52Z" level=info msg="try to start program" program=wasm_engine
+time="2023-08-21T02:33:53Z" level=info msg="success to start program" program=rpk_status
+time="2023-08-21T02:33:53Z" level=info msg="success to start program" program=wasm_engine
+time="2023-08-21T02:37:03Z" level=info msg="create process:wasm_engine"
+time="2023-08-21T02:37:03Z" level=info msg="create process:rpk_status"
+time="2023-08-21T02:37:03Z" level=info msg="stop listening"
+time="2023-08-21T02:37:03Z" level=info msg="try to start program" program=rpk_status
+time="2023-08-21T02:37:03Z" level=info msg="try to start program" program=wasm_engine
+time="2023-08-21T02:37:04Z" level=info msg="success to start program" program=rpk_status
+time="2023-08-21T02:37:04Z" level=info msg="success to start program" program=wasm_engine
